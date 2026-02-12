@@ -1,0 +1,99 @@
+// spreads.json
+{
+  "version": "0.1.0",
+  "states": ["Frozen", "Overwhelmed", "Avoiding", "Exhausted", "Blank", "AnxiousLoop"],
+  "spread_schema": {
+    "id": "string",
+    "name": "string",
+    "state": "Frozen|Overwhelmed|Avoiding|Exhausted|Blank|AnxiousLoop|Any",
+    "description": "string",
+    "slots": [
+      {
+        "slot_name": "string",
+        "required_kind": "REFLECT|SOMATIC|ENV|EXTERNALIZE|EXECUTE|REWARD|SOCIAL|IFTHEN",
+        "pool_filter": {
+          "state_affinity_any_of": ["..."],
+          "max_difficulty": "0-5",
+          "intensity_any_of": ["LOW|MED|HIGH|Any"],
+          "tags_any_of": ["string"]
+        },
+        "selection": {
+          "mode": "WEIGHTED",
+          "weights": {
+            "state_match": 4,
+            "intensity_match": 2,
+            "recently_failed_penalty": -3,
+            "recently_succeeded_bonus": 1
+          }
+        }
+      }
+    ]
+  },
+  "spreads": [
+    {
+      "id": "SP_BREAK_STONE",
+      "name": "Break the Stone",
+      "state": "Frozen",
+      "description": "Body first → environment → smallest action.",
+      "slots": [
+        { "slot_name": "Reflection", "required_kind": "REFLECT", "pool_filter": { "state_affinity_any_of": ["Frozen"], "max_difficulty": 0, "intensity_any_of": ["Any"], "tags_any_of": ["reflect"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 5, "intensity_match": 2, "recently_failed_penalty": -3, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Somatic Shift", "required_kind": "SOMATIC", "pool_filter": { "state_affinity_any_of": ["Frozen", "Any"], "max_difficulty": 1, "intensity_any_of": ["MED", "HIGH", "Any"], "tags_any_of": ["breath", "pose", "unfreeze"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 4, "intensity_match": 2, "recently_failed_penalty": -4, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Environment", "required_kind": "ENV", "pool_filter": { "state_affinity_any_of": ["Frozen", "Any"], "max_difficulty": 2, "intensity_any_of": ["Any"], "tags_any_of": ["setup", "entry", "friction"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 3, "intensity_match": 1, "recently_failed_penalty": -3, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "First Action", "required_kind": "EXECUTE", "pool_filter": { "state_affinity_any_of": ["Any"], "max_difficulty": 2, "intensity_any_of": ["Any"], "tags_any_of": ["micro", "entry"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 2, "intensity_match": 1, "recently_failed_penalty": -4, "recently_succeeded_bonus": 2 } } }
+      ]
+    },
+    {
+      "id": "SP_CLEAR_FOG",
+      "name": "Clear the Fog",
+      "state": "Overwhelmed",
+      "description": "Externalize → shrink → act.",
+      "slots": [
+        { "slot_name": "Reflection", "required_kind": "REFLECT", "pool_filter": { "state_affinity_any_of": ["Overwhelmed"], "max_difficulty": 0, "intensity_any_of": ["Any"], "tags_any_of": ["reflect"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 5, "intensity_match": 2, "recently_failed_penalty": -3, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Externalize", "required_kind": "EXTERNALIZE", "pool_filter": { "state_affinity_any_of": ["Overwhelmed", "Any"], "max_difficulty": 2, "intensity_any_of": ["Any"], "tags_any_of": ["externalize", "clarity", "overwhelm"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 4, "intensity_match": 1, "recently_failed_penalty": -3, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Shrink", "required_kind": "EXTERNALIZE", "pool_filter": { "state_affinity_any_of": ["Any"], "max_difficulty": 2, "intensity_any_of": ["MED", "HIGH", "Any"], "tags_any_of": ["shrink", "scope"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 2, "intensity_match": 2, "recently_failed_penalty": -2, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Action", "required_kind": "EXECUTE", "pool_filter": { "state_affinity_any_of": ["Any"], "max_difficulty": 3, "intensity_any_of": ["Any"], "tags_any_of": ["micro", "timer", "entry"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 2, "intensity_match": 1, "recently_failed_penalty": -4, "recently_succeeded_bonus": 2 } } }
+      ]
+    },
+    {
+      "id": "SP_CROSS_THRESHOLD",
+      "name": "Cross the Threshold",
+      "state": "Avoiding",
+      "description": "Permission → shrink → tiny action.",
+      "slots": [
+        { "slot_name": "Reflection", "required_kind": "REFLECT", "pool_filter": { "state_affinity_any_of": ["Avoiding"], "max_difficulty": 0, "intensity_any_of": ["Any"], "tags_any_of": ["reflect"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 5, "intensity_match": 1, "recently_failed_penalty": -3, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Permission", "required_kind": "EXTERNALIZE", "pool_filter": { "state_affinity_any_of": ["Avoiding", "Any"], "max_difficulty": 2, "intensity_any_of": ["Any"], "tags_any_of": ["reframe", "avoidance"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 4, "intensity_match": 1, "recently_failed_penalty": -2, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Shrink", "required_kind": "EXTERNALIZE", "pool_filter": { "state_affinity_any_of": ["Any"], "max_difficulty": 2, "intensity_any_of": ["Any"], "tags_any_of": ["shrink"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 2, "intensity_match": 1, "recently_failed_penalty": -2, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Action", "required_kind": "EXECUTE", "pool_filter": { "state_affinity_any_of": ["Any"], "max_difficulty": 2, "intensity_any_of": ["Any"], "tags_any_of": ["micro", "entry", "admin", "email", "writing"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 2, "intensity_match": 1, "recently_failed_penalty": -4, "recently_succeeded_bonus": 2 } } },
+        { "slot_name": "Seal (optional)", "required_kind": "IFTHEN", "pool_filter": { "state_affinity_any_of": ["Any"], "max_difficulty": 2, "intensity_any_of": ["LOW", "MED", "Any"], "tags_any_of": ["implementation-intention"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 1, "intensity_match": 1, "recently_failed_penalty": -1, "recently_succeeded_bonus": 1 } } }
+      ]
+    },
+    {
+      "id": "SP_RESTORE_FLAME",
+      "name": "Restore the Flame",
+      "state": "Exhausted",
+      "description": "Restore → tiny keep-alive action.",
+      "slots": [
+        { "slot_name": "Reflection", "required_kind": "REFLECT", "pool_filter": { "state_affinity_any_of": ["Exhausted"], "max_difficulty": 0, "intensity_any_of": ["Any"], "tags_any_of": ["reflect"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 5, "intensity_match": 2, "recently_failed_penalty": -2, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Restore", "required_kind": "REWARD", "pool_filter": { "state_affinity_any_of": ["Exhausted", "Any"], "max_difficulty": 1, "intensity_any_of": ["Any"], "tags_any_of": ["restore"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 4, "intensity_match": 1, "recently_failed_penalty": -2, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Keep-Alive", "required_kind": "EXECUTE", "pool_filter": { "state_affinity_any_of": ["Any"], "max_difficulty": 2, "intensity_any_of": ["Any"], "tags_any_of": ["entry", "micro"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 2, "intensity_match": 1, "recently_failed_penalty": -4, "recently_succeeded_bonus": 2 } } }
+      ]
+    },
+    {
+      "id": "SP_SIGNAL_STATIC",
+      "name": "Signal from Static",
+      "state": "Blank",
+      "description": "Two choices → environment → act.",
+      "slots": [
+        { "slot_name": "Reflection", "required_kind": "REFLECT", "pool_filter": { "state_affinity_any_of": ["Blank"], "max_difficulty": 0, "intensity_any_of": ["Any"], "tags_any_of": ["reflect"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 5, "intensity_match": 1, "recently_failed_penalty": -2, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Two Choices", "required_kind": "EXTERNALIZE", "pool_filter": { "state_affinity_any_of": ["Blank", "Any"], "max_difficulty": 2, "intensity_any_of": ["Any"], "tags_any_of": ["choice"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 4, "intensity_match": 1, "recently_failed_penalty": -2, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Environment", "required_kind": "ENV", "pool_filter": { "state_affinity_any_of": ["Any"], "max_difficulty": 2, "intensity_any_of": ["Any"], "tags_any_of": ["setup", "entry"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 2, "intensity_match": 1, "recently_failed_penalty": -2, "recently_succeeded_bonus": 1 } } },
+        { "slot_name": "Action", "required_kind": "EXECUTE", "pool_filter": { "state_affinity_any_of": ["Any"], "max_difficulty": 2, "intensity_any_of": ["Any"], "tags_any_of": ["micro", "entry"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 2, "intensity_match": 1, "recently_failed_penalty": -4, "recently_succeeded_bonus": 2 } } }
+      ]
+    }
+  ],
+  "one_card_pulls": [
+    { "id": "PULL_ONE_MOVE_NOW", "name": "One Move Now", "slot": { "required_kind": "EXECUTE", "pool_filter": { "state_affinity_any_of": ["Any"], "max_difficulty": 2, "intensity_any_of": ["Any"], "tags_any_of": ["micro", "entry"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 3, "intensity_match": 1, "recently_failed_penalty": -4, "recently_succeeded_bonus": 1 } } } },
+    { "id": "PULL_SOFTEN_FIRST", "name": "Soften First", "slot": { "required_kind": "SOMATIC", "pool_filter": { "state_affinity_any_of": ["Any"], "max_difficulty": 1, "intensity_any_of": ["MED", "HIGH", "Any"], "tags_any_of": ["breath", "pose", "grounding"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 3, "intensity_match": 2, "recently_failed_penalty": -3, "recently_succeeded_bonus": 1 } } } },
+    { "id": "PULL_WHATS_HAPPENING", "name": "What’s Happening?", "slot": { "required_kind": "REFLECT", "pool_filter": { "state_affinity_any_of": ["Frozen", "Overwhelmed", "Avoiding", "Exhausted", "Blank"], "max_difficulty": 0, "intensity_any_of": ["Any"], "tags_any_of": ["reflect"] }, "selection": { "mode": "WEIGHTED", "weights": { "state_match": 10, "intensity_match": 0, "recently_failed_penalty": 0, "recently_succeeded_bonus": 0 } } } }
+  ]
+}

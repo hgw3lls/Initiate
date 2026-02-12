@@ -1,0 +1,59 @@
+// events.json
+{
+  "version": "0.1.0",
+  "goals": {
+    "primary": ["TTFA_seconds", "step_completion_rate", "return_after_fail_rate"],
+    "secondary": ["pre_post_stuck_delta", "session_minutes"]
+  },
+  "event_schema": {
+    "common": {
+      "user_id": "string (or anon)",
+      "session_id": "string",
+      "timestamp_iso": "string",
+      "state_type": "Frozen|Overwhelmed|Avoiding|Exhausted|Blank|AnxiousLoop|Unknown",
+      "stuck_level": "0-100",
+      "intensity_band": "LOW|MED|HIGH",
+      "app_version": "string"
+    },
+    "events": [
+      {
+        "name": "SESSION_START",
+        "fields": { "entry_mode": "ONE_CARD|SPREAD|AVOIDED_TASK|SESSION_MODE", "goal_text_present": "boolean" }
+      },
+      {
+        "name": "CARD_DRAWN",
+        "fields": { "spread_id": "string", "slot_name": "string", "card_id": "string", "kind": "string", "difficulty": "number", "duration_sec": "number" }
+      },
+      {
+        "name": "STEP_STARTED",
+        "fields": { "card_id": "string", "kind": "string" }
+      },
+      {
+        "name": "STEP_OUTCOME",
+        "fields": { "card_id": "string", "kind": "string", "outcome": "DONE|TOO_HARD|SKIP|STOP_HERE", "time_to_done_sec": "number" }
+      },
+      {
+        "name": "SESSION_END",
+        "fields": {
+          "ttfa_seconds": "number",
+          "steps_done": "number",
+          "steps_attempted": "number",
+          "abandoned": "boolean",
+          "pre_stuck": "0-100",
+          "post_stuck": "0-100"
+        }
+      }
+    ]
+  },
+  "derived_metrics": {
+    "TTFA_seconds": "time from SESSION_START to first STEP_OUTCOME where outcome=DONE",
+    "step_completion_rate": "steps_done / steps_attempted",
+    "return_after_fail_rate": "probability user starts a session within 24h after a session with 2+ TOO_HARD or abandoned",
+    "pre_post_stuck_delta": "pre_stuck - post_stuck"
+  },
+  "ethics": {
+    "privacy_default": "local_only",
+    "analytics_opt_in": true,
+    "no_sensitive_inference": true
+  }
+}
