@@ -1,5 +1,5 @@
-const { describe, it, expect } = require('vitest');
-const { applyOutcome } = require('./adapter.ts');
+import { describe, it, expect } from 'vitest';
+import { applyOutcome } from './adapter.ts';
 
 function makePolicy() {
   return {
