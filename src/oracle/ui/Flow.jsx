@@ -3,7 +3,7 @@ import { loadDeck, loadEventsSchema, loadPolicy, loadSpreads } from '../loaders.
 import { buildReading, selectSpreadId } from '../engine/select.ts';
 import { applyOutcome } from '../engine/adapter.ts';
 import { startSession, logEvent, endSession } from '../telemetry/logger.ts';
-import { computeTTFA } from '../telemetry/metrics.ts';
+import metrics from '../telemetry/metrics.ts';
 import { ReturnToCenter } from './screens/ReturnToCenter.jsx';
 import { StepReveal } from './screens/StepReveal.jsx';
 import { BeginGate } from './screens/BeginGate.jsx';
@@ -38,7 +38,7 @@ export function Flow() {
   const [events, setEvents] = useState([]);
 
   const step = useMemo(() => reading?.steps?.[currentIndex] || null, [reading, currentIndex]);
-  const ttfaSeconds = useMemo(() => computeTTFA(events), [events]);
+  const ttfaSeconds = useMemo(() => metrics.computeTTFA(events), [events]);
   const recentOutcomes = useMemo(() => events
     .filter((event) => event.name === 'STEP_OUTCOME')
     .map((event) => ({ outcome: event.fields?.outcome, card_id: event.fields?.card_id }))
