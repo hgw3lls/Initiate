@@ -9,7 +9,7 @@ import {
 import type { Deck, EventsSchema, PolicyConfig, SpreadsConfig } from './types';
 
 type OracleSpecName = 'deck' | 'spreads' | 'policy' | 'events';
-type SourceMode = 'module' | 'public';
+type SourceMode = 'public';
 
 type SpecConfig = {
   displayPath: string;
@@ -18,27 +18,25 @@ type SpecConfig = {
 };
 
 const SPECS: Record<OracleSpecName, SpecConfig> = {
-  // These files currently live at the repo root (neither /src nor /public),
-  // so we load them as module assets via Vite raw imports.
   deck: {
     displayPath: 'deck.json',
-    mode: 'module',
-    loadRaw: async () => (await import('../../deck.json?raw')).default,
+    mode: 'public',
+    loadRaw: async () => await (await fetch(`${import.meta.env.BASE_URL}deck.json`)).text(),
   },
   spreads: {
     displayPath: 'spreads.json',
-    mode: 'module',
-    loadRaw: async () => (await import('../../spreads.json?raw')).default,
+    mode: 'public',
+    loadRaw: async () => await (await fetch(`${import.meta.env.BASE_URL}spreads.json`)).text(),
   },
   policy: {
     displayPath: 'policy.json',
-    mode: 'module',
-    loadRaw: async () => (await import('../../policy.json?raw')).default,
+    mode: 'public',
+    loadRaw: async () => await (await fetch(`${import.meta.env.BASE_URL}policy.json`)).text(),
   },
   events: {
     displayPath: 'events.json',
-    mode: 'module',
-    loadRaw: async () => (await import('../../events.json?raw')).default,
+    mode: 'public',
+    loadRaw: async () => await (await fetch(`${import.meta.env.BASE_URL}events.json`)).text(),
   },
 };
 
