@@ -23,7 +23,7 @@ function computeStepCompletionRate(events) {
   return stepsDone / stepsAttempted;
 }
 
-module.exports = {
+export default {
   computeTTFA,
   computeStepCompletionRate,
 };
