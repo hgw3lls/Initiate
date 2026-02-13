@@ -1,0 +1,20 @@
+{
+  "name": "initiate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "build": "node scripts/build.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "zod": "file:vendor/zod"
+  },
+  "devDependencies": {
+    "vitest": "file:vendor/vitest"
+  }
+}
