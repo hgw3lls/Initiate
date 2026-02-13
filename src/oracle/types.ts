@@ -54,17 +54,18 @@ export interface Deck {
 }
 
 export interface SpreadSlot {
-  id: string;
-  name: string;
-  slot: Record<string, unknown>;
+  slot_name: string;
+  required_kind: string;
+  pool_filter?: Record<string, unknown>;
+  selection?: Record<string, unknown>;
   [key: string]: unknown;
 }
 
 export interface Spread {
   id: string;
   name: string;
-  for_state: StateType;
-  intensity_gate: IntensityBand;
+  state: StateType;
+  description?: string;
   slots: SpreadSlot[];
   [key: string]: unknown;
 }
@@ -73,6 +74,8 @@ export interface SpreadsConfig {
   version: string;
   spread_schema: Record<string, unknown>;
   spreads: Spread[];
+  states?: StateType[];
+  one_card_pulls?: Record<string, unknown>[];
   [key: string]: unknown;
 }
 

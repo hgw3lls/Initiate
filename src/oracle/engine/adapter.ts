@@ -205,6 +205,10 @@ function applyOutcome({ reading, currentIndex, outcome, policy, context, history
   return result;
 }
 
-module.exports = {
+// ESM exports for Vite/Rollup (and to match Flow.jsx imports).
+export { applyOutcome };
+
+// Optional default export for any callers that prefer object-style imports.
+export default {
   applyOutcome,
 };

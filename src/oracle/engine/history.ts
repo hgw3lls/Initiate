@@ -8,6 +8,4 @@ function getHistoryStats(cardId, history) {
   };
 }
 
-module.exports = {
-  getHistoryStats,
-};
+export { getHistoryStats };

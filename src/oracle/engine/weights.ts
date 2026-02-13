@@ -1,4 +1,4 @@
-const { getHistoryStats } = require('./history.ts');
+import { getHistoryStats } from './history.ts';
 
 function scoreCard(card, context, weights, history) {
   const safeWeights = {
@@ -45,7 +45,4 @@ function weightedSelect(cards, context, weights, history) {
   return weighted[0].card;
 }
 
-module.exports = {
-  scoreCard,
-  weightedSelect,
-};
+export { scoreCard, weightedSelect };

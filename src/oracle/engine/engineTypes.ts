@@ -3,6 +3,4 @@
 
 const GENTLER_KIND_ORDER = ['SOMATIC', 'ENV', 'EXTERNALIZE', 'EXECUTE', 'REWARD'];
 
-module.exports = {
-  GENTLER_KIND_ORDER,
-};
+export { GENTLER_KIND_ORDER };

@@ -1,4 +1,4 @@
-const { TELEMETRY_STORAGE_KEY } = require('./types.ts');
+import { TELEMETRY_STORAGE_KEY } from './types.ts';
 
 function createMemoryStorage() {
   const data = {};
@@ -18,7 +18,7 @@ function createMemoryStorage() {
   };
 }
 
-function getStorage() {
+export function getStorage() {
   if (typeof globalThis.localStorage !== 'undefined') {
     return globalThis.localStorage;
   }
@@ -30,7 +30,7 @@ function getStorage() {
   return globalThis.__oracleMemoryStorage;
 }
 
-function readSessions() {
+export function readSessions() {
   const storage = getStorage();
   const raw = storage.getItem(TELEMETRY_STORAGE_KEY);
   if (!raw) return {};
@@ -43,12 +43,12 @@ function readSessions() {
   }
 }
 
-function writeSessions(sessions) {
+export function writeSessions(sessions) {
   const storage = getStorage();
   storage.setItem(TELEMETRY_STORAGE_KEY, JSON.stringify(sessions));
 }
 
-function upsertSession(sessionId, updater) {
+export function upsertSession(sessionId, updater) {
   const sessions = readSessions();
   const current = sessions[sessionId] || { context: {}, events: [] };
   sessions[sessionId] = updater(current);
@@ -56,9 +56,4 @@ function upsertSession(sessionId, updater) {
   return sessions[sessionId];
 }
 
-module.exports = {
-  getStorage,
-  readSessions,
-  writeSessions,
-  upsertSession,
-};
+

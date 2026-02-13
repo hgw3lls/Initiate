@@ -1,0 +1,660 @@
+// deck.json
+{
+  "version": "0.1.0",
+  "language": "en",
+  "card_schema": {
+    "id": "string",
+    "name": "string",
+    "kind": "REFLECT|SOMATIC|ENV|EXTERNALIZE|EXECUTE|REWARD|SOCIAL|IFTHEN",
+    "state_affinity": ["Frozen|Overwhelmed|Avoiding|Exhausted|Blank|AnxiousLoop|Any"],
+    "intensity_affinity": ["LOW|MED|HIGH|Any"],
+    "difficulty": "0-5",
+    "duration_sec": "10-180",
+    "oracle_text": {
+      "title": "string",
+      "reflection": "string",
+      "guidance": "string"
+    },
+    "action": {
+      "label": "string",
+      "instruction": "string",
+      "timer_sec": "number",
+      "completion_check": "TAP_DONE|TIMER_DONE|CHECKLIST"
+    },
+    "fallbacks": [
+      {
+        "when": "TOO_HARD|SKIP",
+        "next_kind": "SOMATIC|ENV|EXTERNALIZE|EXECUTE|REWARD",
+        "instruction_override": "string"
+      }
+    ],
+    "escalate_to": ["string"],
+    "tags": ["string"]
+  },
+  "cards": [
+    {
+      "id": "R_STONE",
+      "name": "The Stone",
+      "kind": "REFLECT",
+      "state_affinity": ["Frozen"],
+      "intensity_affinity": ["MED", "HIGH"],
+      "difficulty": 0,
+      "duration_sec": 5,
+      "oracle_text": {
+        "title": "The Stone",
+        "reflection": "Your system has gone still. This is protection, not failure.",
+        "guidance": "We start with the body. Not the task."
+      },
+      "action": {
+        "label": "Continue",
+        "instruction": "Tap continue to draw the next card.",
+        "timer_sec": 0,
+        "completion_check": "TAP_DONE"
+      },
+      "fallbacks": [],
+      "escalate_to": ["S_BREATH_4_6", "S_MOUNTAIN", "E_STAND_UP"],
+      "tags": ["reflect", "freeze"]
+    },
+    {
+      "id": "R_FOG",
+      "name": "The Fog",
+      "kind": "REFLECT",
+      "state_affinity": ["Overwhelmed"],
+      "intensity_affinity": ["MED", "HIGH"],
+      "difficulty": 0,
+      "duration_sec": 5,
+      "oracle_text": {
+        "title": "The Fog",
+        "reflection": "Too many paths at once. The mind can’t choose because it’s carrying too much.",
+        "guidance": "We reduce choices until one door appears."
+      },
+      "action": { "label": "Continue", "instruction": "Tap continue to draw the next card.", "timer_sec": 0, "completion_check": "TAP_DONE" },
+      "fallbacks": [],
+      "escalate_to": ["X_NAME_TASK", "X_3_BULLETS", "D_TWO_CHOICES"],
+      "tags": ["reflect", "overwhelm"]
+    },
+    {
+      "id": "R_THRESHOLD",
+      "name": "The Threshold",
+      "kind": "REFLECT",
+      "state_affinity": ["Avoiding"],
+      "intensity_affinity": ["LOW", "MED", "HIGH"],
+      "difficulty": 0,
+      "duration_sec": 5,
+      "oracle_text": {
+        "title": "The Threshold",
+        "reflection": "Something in you is resisting. Usually it’s fear, shame, or perfectionism—not laziness.",
+        "guidance": "We enter gently. Imperfectly. Safely."
+      },
+      "action": { "label": "Continue", "instruction": "Tap continue to draw the next card.", "timer_sec": 0, "completion_check": "TAP_DONE" },
+      "fallbacks": [],
+      "escalate_to": ["X_PERMISSION", "D_SHRINK_SCOPE", "A_ONE_WORD"],
+      "tags": ["reflect", "avoidance"]
+    },
+    {
+      "id": "R_EMPTY",
+      "name": "The Empty Battery",
+      "kind": "REFLECT",
+      "state_affinity": ["Exhausted"],
+      "intensity_affinity": ["MED", "HIGH"],
+      "difficulty": 0,
+      "duration_sec": 5,
+      "oracle_text": {
+        "title": "The Empty Battery",
+        "reflection": "You’re depleted. Pushing harder will backfire.",
+        "guidance": "We restore first. Then we do one tiny keep-alive step."
+      },
+      "action": { "label": "Continue", "instruction": "Tap continue to draw the next card.", "timer_sec": 0, "completion_check": "TAP_DONE" },
+      "fallbacks": [],
+      "escalate_to": ["W_STEP_OUTSIDE", "W_WATER", "A_OPEN_ONLY"],
+      "tags": ["reflect", "exhaustion"]
+    },
+    {
+      "id": "R_STATIC",
+      "name": "The Static",
+      "kind": "REFLECT",
+      "state_affinity": ["Blank"],
+      "intensity_affinity": ["LOW", "MED", "HIGH"],
+      "difficulty": 0,
+      "duration_sec": 5,
+      "oracle_text": {
+        "title": "The Static",
+        "reflection": "No signal. Too many options or none at all.",
+        "guidance": "We borrow structure. Two choices. Then one move."
+      },
+      "action": { "label": "Continue", "instruction": "Tap continue to draw the next card.", "timer_sec": 0, "completion_check": "TAP_DONE" },
+      "fallbacks": [],
+      "escalate_to": ["D_TWO_CHOICES", "E_OPEN_LAPTOP", "A_OPEN_ONLY"],
+      "tags": ["reflect", "blank"]
+    },
+
+    // ---------- SOMATIC ----------
+    {
+      "id": "S_BREATH_4_6",
+      "name": "The Breath (4/6)",
+      "kind": "SOMATIC",
+      "state_affinity": ["Frozen", "Overwhelmed", "AnxiousLoop", "Any"],
+      "intensity_affinity": ["MED", "HIGH", "Any"],
+      "difficulty": 0,
+      "duration_sec": 25,
+      "oracle_text": {
+        "title": "The Breath",
+        "reflection": "Before the mind can act, the body must feel safe enough to move.",
+        "guidance": "Inhale 4, exhale 6 — three cycles."
+      },
+      "action": {
+        "label": "Breathe (3 cycles)",
+        "instruction": "Inhale 4 seconds. Exhale 6 seconds. Repeat 3 times.",
+        "timer_sec": 25,
+        "completion_check": "TIMER_DONE"
+      },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "SOMATIC", "instruction_override": "Take one slow inhale and one longer exhale. Tap Done." }
+      ],
+      "escalate_to": ["E_STAND_UP", "A_OPEN_ONLY"],
+      "tags": ["breath", "regulation"]
+    },
+    {
+      "id": "S_MOUNTAIN",
+      "name": "Mountain",
+      "kind": "SOMATIC",
+      "state_affinity": ["Frozen", "Blank", "Any"],
+      "intensity_affinity": ["LOW", "MED", "HIGH", "Any"],
+      "difficulty": 0,
+      "duration_sec": 20,
+      "oracle_text": {
+        "title": "Mountain",
+        "reflection": "Stand into a shape that can act.",
+        "guidance": "Feet down. Chest soft. One long exhale."
+      },
+      "action": {
+        "label": "Stand + exhale",
+        "instruction": "Stand up. Feel your feet. Exhale slowly once. Tap Done.",
+        "timer_sec": 20,
+        "completion_check": "TAP_DONE"
+      },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "SOMATIC", "instruction_override": "Sit up straighter. Drop shoulders. One long exhale. Tap Done." }
+      ],
+      "escalate_to": ["E_SIT_AT_DESK", "A_OPEN_ONLY"],
+      "tags": ["pose", "activation"]
+    },
+    {
+      "id": "S_CHILD",
+      "name": "Child (Fold)",
+      "kind": "SOMATIC",
+      "state_affinity": ["Overwhelmed", "AnxiousLoop"],
+      "intensity_affinity": ["MED", "HIGH"],
+      "difficulty": 0,
+      "duration_sec": 25,
+      "oracle_text": {
+        "title": "The Fold",
+        "reflection": "The nervous system is loud. So we lower the volume.",
+        "guidance": "Fold forward. Breathe low."
+      },
+      "action": {
+        "label": "Fold 20s",
+        "instruction": "Fold forward in a comfortable position for ~20 seconds. Slow exhale. Tap Done.",
+        "timer_sec": 25,
+        "completion_check": "TAP_DONE"
+      },
+      "fallbacks": [
+        { "when": "SKIP", "next_kind": "SOMATIC", "instruction_override": "Look at one object. Exhale slowly twice. Tap Done." }
+      ],
+      "escalate_to": ["X_NAME_TASK", "A_OPEN_ONLY"],
+      "tags": ["pose", "calm"]
+    },
+    {
+      "id": "S_CATCOW",
+      "name": "Cat-Cow x3",
+      "kind": "SOMATIC",
+      "state_affinity": ["Frozen", "Blank", "Any"],
+      "intensity_affinity": ["MED", "HIGH", "Any"],
+      "difficulty": 1,
+      "duration_sec": 30,
+      "oracle_text": {
+        "title": "Spine Wave",
+        "reflection": "You don’t need motivation. You need motion.",
+        "guidance": "Three slow spine waves."
+      },
+      "action": {
+        "label": "Move x3",
+        "instruction": "Do 3 slow Cat-Cow motions (standing or on chair if needed). Tap Done.",
+        "timer_sec": 30,
+        "completion_check": "TAP_DONE"
+      },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "SOMATIC", "instruction_override": "Roll shoulders twice. Tap Done." }
+      ],
+      "escalate_to": ["E_OPEN_LAPTOP", "A_OPEN_ONLY"],
+      "tags": ["movement", "unfreeze"]
+    },
+    {
+      "id": "S_GROUND_54321",
+      "name": "5-4-3-2-1",
+      "kind": "SOMATIC",
+      "state_affinity": ["AnxiousLoop", "Overwhelmed", "Any"],
+      "intensity_affinity": ["MED", "HIGH", "Any"],
+      "difficulty": 0,
+      "duration_sec": 45,
+      "oracle_text": {
+        "title": "Ground Signal",
+        "reflection": "The mind is spinning forward. Return to the senses.",
+        "guidance": "Name what’s here."
+      },
+      "action": {
+        "label": "Ground",
+        "instruction": "Name: 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste. Tap Done.",
+        "timer_sec": 45,
+        "completion_check": "TAP_DONE"
+      },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "SOMATIC", "instruction_override": "Name 3 things you see and 1 thing you feel. Tap Done." }
+      ],
+      "escalate_to": ["X_NAME_TASK", "A_OPEN_ONLY"],
+      "tags": ["grounding", "anxiety"]
+    },
+
+    // ---------- ENV ----------
+    {
+      "id": "E_STAND_UP",
+      "name": "Stand Up",
+      "kind": "ENV",
+      "state_affinity": ["Frozen", "Blank", "Any"],
+      "intensity_affinity": ["LOW", "MED", "HIGH", "Any"],
+      "difficulty": 0,
+      "duration_sec": 10,
+      "oracle_text": {
+        "title": "Change the Frame",
+        "reflection": "Environment is a lever. Move one thing: you.",
+        "guidance": "Stand. That’s enough."
+      },
+      "action": { "label": "Stand", "instruction": "Stand up (or sit upright). Tap Done.", "timer_sec": 10, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "SOMATIC", "instruction_override": "Open your hands, unclench jaw, exhale once. Tap Done." }
+      ],
+      "escalate_to": ["E_OPEN_LAPTOP", "A_OPEN_ONLY"],
+      "tags": ["friction", "setup"]
+    },
+    {
+      "id": "E_OPEN_LAPTOP",
+      "name": "Open the Laptop",
+      "kind": "ENV",
+      "state_affinity": ["Any"],
+      "intensity_affinity": ["LOW", "MED", "HIGH", "Any"],
+      "difficulty": 1,
+      "duration_sec": 15,
+      "oracle_text": {
+        "title": "The Door",
+        "reflection": "The first step is not the work—it’s entering the space where work can happen.",
+        "guidance": "Open the tool. Stop."
+      },
+      "action": { "label": "Open", "instruction": "Open your laptop / device / tool for the task. Do nothing else. Tap Done.", "timer_sec": 15, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "SKIP", "next_kind": "ENV", "instruction_override": "Move the laptop closer to you. Tap Done." }
+      ],
+      "escalate_to": ["A_OPEN_ONLY", "X_NAME_TASK"],
+      "tags": ["setup", "entry"]
+    },
+    {
+      "id": "E_SIT_AT_DESK",
+      "name": "Sit at the Desk",
+      "kind": "ENV",
+      "state_affinity": ["Frozen", "Overwhelmed", "Blank", "Any"],
+      "intensity_affinity": ["MED", "HIGH", "Any"],
+      "difficulty": 1,
+      "duration_sec": 20,
+      "oracle_text": {
+        "title": "Seat of Motion",
+        "reflection": "Don’t start the task. Start the posture of doing.",
+        "guidance": "Sit. Hands near keyboard."
+      },
+      "action": { "label": "Sit", "instruction": "Sit where you can do the task. Place hands near tools. Tap Done.", "timer_sec": 20, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "ENV", "instruction_override": "Just move to the room where you’d do it. Tap Done." }
+      ],
+      "escalate_to": ["X_3_BULLETS", "A_OPEN_ONLY"],
+      "tags": ["setup", "posture"]
+    },
+    {
+      "id": "E_CLEAR_10",
+      "name": "Clear 10 Seconds",
+      "kind": "ENV",
+      "state_affinity": ["Overwhelmed", "Any"],
+      "intensity_affinity": ["MED", "HIGH", "Any"],
+      "difficulty": 1,
+      "duration_sec": 15,
+      "oracle_text": {
+        "title": "Clear the Surface",
+        "reflection": "Clutter increases cognitive load. We reduce it slightly.",
+        "guidance": "Only ten seconds."
+      },
+      "action": { "label": "Clear", "instruction": "Clear ONE small area for 10 seconds. Stop. Tap Done.", "timer_sec": 15, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "SKIP", "next_kind": "ENV", "instruction_override": "Move one object out of your way. Tap Done." }
+      ],
+      "escalate_to": ["X_NAME_TASK", "A_OPEN_ONLY"],
+      "tags": ["friction", "cognitive-load"]
+    },
+
+    // ---------- EXTERNALIZE ----------
+    {
+      "id": "X_NAME_TASK",
+      "name": "Name the Task",
+      "kind": "EXTERNALIZE",
+      "state_affinity": ["Overwhelmed", "Avoiding", "Blank", "Any"],
+      "intensity_affinity": ["LOW", "MED", "HIGH", "Any"],
+      "difficulty": 1,
+      "duration_sec": 15,
+      "oracle_text": {
+        "title": "Name It",
+        "reflection": "Ambiguity is paralysis fuel.",
+        "guidance": "Give it a name. That’s all."
+      },
+      "action": { "label": "Write name", "instruction": "Write the task name (3–7 words). Stop. Tap Done.", "timer_sec": 15, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "EXTERNALIZE", "instruction_override": "Type 1–2 words. Stop. Tap Done." }
+      ],
+      "escalate_to": ["X_FIRST_STEP_ONLY", "A_OPEN_ONLY"],
+      "tags": ["externalize", "clarity"]
+    },
+    {
+      "id": "X_3_BULLETS",
+      "name": "3 Bullets",
+      "kind": "EXTERNALIZE",
+      "state_affinity": ["Overwhelmed", "Any"],
+      "intensity_affinity": ["MED", "HIGH", "Any"],
+      "difficulty": 2,
+      "duration_sec": 45,
+      "oracle_text": {
+        "title": "Reduce the Fog",
+        "reflection": "The brain is holding too much internally.",
+        "guidance": "Put three fragments on the page."
+      },
+      "action": { "label": "3 bullets", "instruction": "Write 3 bullets about what’s next. No grammar. Tap Done.", "timer_sec": 45, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "EXTERNALIZE", "instruction_override": "Write 1 bullet only. Tap Done." }
+      ],
+      "escalate_to": ["D_SHRINK_SCOPE", "A_ONE_WORD"],
+      "tags": ["externalize", "overwhelm"]
+    },
+    {
+      "id": "X_FIRST_STEP_ONLY",
+      "name": "First Step Only",
+      "kind": "EXTERNALIZE",
+      "state_affinity": ["Overwhelmed", "Avoiding", "Any"],
+      "intensity_affinity": ["LOW", "MED", "HIGH", "Any"],
+      "difficulty": 2,
+      "duration_sec": 30,
+      "oracle_text": {
+        "title": "One Door",
+        "reflection": "You don’t need the plan. You need the first move.",
+        "guidance": "Write only step one."
+      },
+      "action": { "label": "Write step 1", "instruction": "Write: “Step 1: ____” and fill in a single action. Tap Done.", "timer_sec": 30, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "SKIP", "next_kind": "ENV", "instruction_override": "Open the document/app only. Tap Done." }
+      ],
+      "escalate_to": ["A_OPEN_ONLY", "A_ONE_WORD"],
+      "tags": ["externalize", "sequencing"]
+    },
+    {
+      "id": "X_PERMISSION",
+      "name": "Permission",
+      "kind": "EXTERNALIZE",
+      "state_affinity": ["Avoiding", "Any"],
+      "intensity_affinity": ["LOW", "MED", "HIGH", "Any"],
+      "difficulty": 1,
+      "duration_sec": 20,
+      "oracle_text": {
+        "title": "Permission",
+        "reflection": "Resistance often protects you from imagined consequences.",
+        "guidance": "Grant a safe beginning."
+      },
+      "action": { "label": "Permission line", "instruction": "Write: “I only have to start imperfectly.” Tap Done.", "timer_sec": 20, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "SKIP", "next_kind": "SOMATIC", "instruction_override": "Exhale slowly twice. Tap Done." }
+      ],
+      "escalate_to": ["D_SHRINK_SCOPE", "A_OPEN_ONLY"],
+      "tags": ["reframe", "avoidance"]
+    },
+
+    // ---------- DECISION / SHRINK ----------
+    {
+      "id": "D_SHRINK_SCOPE",
+      "name": "Make It Ridiculous",
+      "kind": "EXTERNALIZE",
+      "state_affinity": ["Avoiding", "Overwhelmed", "Any"],
+      "intensity_affinity": ["MED", "HIGH", "Any"],
+      "difficulty": 1,
+      "duration_sec": 20,
+      "oracle_text": {
+        "title": "Smaller Door",
+        "reflection": "If the step feels heavy, it’s too large.",
+        "guidance": "Shrink it until it feels almost silly."
+      },
+      "action": { "label": "Shrink", "instruction": "Rewrite the task into a 10-second version. Tap Done.", "timer_sec": 20, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "EXTERNALIZE", "instruction_override": "Write: “10 seconds: open the file.” Tap Done." }
+      ],
+      "escalate_to": ["A_OPEN_ONLY", "A_ONE_WORD"],
+      "tags": ["shrink", "scope"]
+    },
+    {
+      "id": "D_TWO_CHOICES",
+      "name": "Two Paths",
+      "kind": "EXTERNALIZE",
+      "state_affinity": ["Blank", "Overwhelmed", "Any"],
+      "intensity_affinity": ["LOW", "MED", "HIGH", "Any"],
+      "difficulty": 1,
+      "duration_sec": 15,
+      "oracle_text": {
+        "title": "Two Paths",
+        "reflection": "Too many options freezes the signal.",
+        "guidance": "Choose between two tiny doors."
+      },
+      "action": {
+        "label": "Pick one",
+        "instruction": "Choose ONE: (A) open the file/app OR (B) write the task name. Then tap Done.",
+        "timer_sec": 15,
+        "completion_check": "TAP_DONE"
+      },
+      "fallbacks": [
+        { "when": "SKIP", "next_kind": "SOMATIC", "instruction_override": "One long exhale. Tap Done." }
+      ],
+      "escalate_to": ["E_OPEN_LAPTOP", "X_NAME_TASK", "A_OPEN_ONLY"],
+      "tags": ["choice", "structure"]
+    },
+
+    // ---------- EXECUTE (micro-actions) ----------
+    {
+      "id": "A_OPEN_ONLY",
+      "name": "Open Only",
+      "kind": "EXECUTE",
+      "state_affinity": ["Any"],
+      "intensity_affinity": ["LOW", "MED", "HIGH", "Any"],
+      "difficulty": 1,
+      "duration_sec": 20,
+      "oracle_text": {
+        "title": "The First Door",
+        "reflection": "Starting is not finishing.",
+        "guidance": "Open it. Stop."
+      },
+      "action": { "label": "Open", "instruction": "Open the exact document/tab/app you need. Do not work yet. Tap Done.", "timer_sec": 20, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "ENV", "instruction_override": "Bring the device/tools closer. Tap Done." }
+      ],
+      "escalate_to": ["A_ONE_WORD", "A_SUBJECT_ONLY"],
+      "tags": ["execute", "entry"]
+    },
+    {
+      "id": "A_ONE_WORD",
+      "name": "One Word",
+      "kind": "EXECUTE",
+      "state_affinity": ["Any"],
+      "intensity_affinity": ["LOW", "MED", "HIGH", "Any"],
+      "difficulty": 1,
+      "duration_sec": 20,
+      "oracle_text": {
+        "title": "One Word",
+        "reflection": "A single mark breaks the spell.",
+        "guidance": "Any word counts."
+      },
+      "action": { "label": "Type 1 word", "instruction": "Type one word related to the task. Stop. Tap Done.", "timer_sec": 20, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "EXECUTE", "instruction_override": "Type one letter. Tap Done." }
+      ],
+      "escalate_to": ["A_ONE_SENTENCE_30S", "A_ONE_MINUTE"],
+      "tags": ["execute", "micro"]
+    },
+    {
+      "id": "A_ONE_SENTENCE_30S",
+      "name": "One Sentence (30s)",
+      "kind": "EXECUTE",
+      "state_affinity": ["Any"],
+      "intensity_affinity": ["LOW", "MED", "Any"],
+      "difficulty": 2,
+      "duration_sec": 45,
+      "oracle_text": {
+        "title": "First Line",
+        "reflection": "Momentum is built, not found.",
+        "guidance": "One sentence is enough."
+      },
+      "action": { "label": "Write", "instruction": "Write one sentence (can be messy). Tap Done.", "timer_sec": 45, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "EXECUTE", "instruction_override": "Write a sentence fragment (half a sentence). Tap Done." }
+      ],
+      "escalate_to": ["A_ONE_MINUTE", "A_THREE_MINUTES"],
+      "tags": ["execute", "writing"]
+    },
+    {
+      "id": "A_ONE_MINUTE",
+      "name": "One Minute",
+      "kind": "EXECUTE",
+      "state_affinity": ["Any"],
+      "intensity_affinity": ["LOW", "MED", "Any"],
+      "difficulty": 3,
+      "duration_sec": 75,
+      "oracle_text": {
+        "title": "One Minute Window",
+        "reflection": "A small container reduces fear.",
+        "guidance": "Work for 60 seconds only."
+      },
+      "action": { "label": "60s", "instruction": "Work on the task for 60 seconds. Stop when timer ends. Tap Done.", "timer_sec": 60, "completion_check": "TIMER_DONE" },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "EXECUTE", "instruction_override": "Work for 20 seconds only. Tap Done." }
+      ],
+      "escalate_to": ["A_THREE_MINUTES"],
+      "tags": ["execute", "timer"]
+    },
+    {
+      "id": "A_THREE_MINUTES",
+      "name": "Three Minutes",
+      "kind": "EXECUTE",
+      "state_affinity": ["Any"],
+      "intensity_affinity": ["LOW", "MED", "Any"],
+      "difficulty": 4,
+      "duration_sec": 210,
+      "oracle_text": {
+        "title": "Short Sprint",
+        "reflection": "Now we ride momentum.",
+        "guidance": "Three minutes, then stop."
+      },
+      "action": { "label": "3 min", "instruction": "Work for 3 minutes. Stop when timer ends. Tap Done.", "timer_sec": 180, "completion_check": "TIMER_DONE" },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "EXECUTE", "instruction_override": "Work for 60 seconds only. Tap Done." }
+      ],
+      "escalate_to": [],
+      "tags": ["execute", "sprint"]
+    },
+
+    // ---------- EXECUTE (admin/email examples) ----------
+    {
+      "id": "A_SUBJECT_ONLY",
+      "name": "Subject Line Only",
+      "kind": "EXECUTE",
+      "state_affinity": ["Avoiding", "Overwhelmed", "Any"],
+      "intensity_affinity": ["LOW", "MED", "HIGH", "Any"],
+      "difficulty": 1,
+      "duration_sec": 30,
+      "oracle_text": {
+        "title": "Subject First",
+        "reflection": "Starting small reduces dread.",
+        "guidance": "Only the subject line."
+      },
+      "action": { "label": "Subject", "instruction": "Open the email/message and write the subject line only. Stop. Tap Done.", "timer_sec": 30, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "TOO_HARD", "next_kind": "EXECUTE", "instruction_override": "Open the draft. Do not type. Tap Done." }
+      ],
+      "escalate_to": ["A_ONE_SENTENCE_30S"],
+      "tags": ["execute", "admin", "email"]
+    },
+
+    // ---------- REWARD ----------
+    {
+      "id": "W_STEP_OUTSIDE",
+      "name": "Step Outside",
+      "kind": "REWARD",
+      "state_affinity": ["Exhausted", "Overwhelmed", "Any"],
+      "intensity_affinity": ["MED", "HIGH", "Any"],
+      "difficulty": 0,
+      "duration_sec": 45,
+      "oracle_text": {
+        "title": "Air & Light",
+        "reflection": "Restore first. Then we touch the task.",
+        "guidance": "20 seconds of outside signal."
+      },
+      "action": { "label": "Outside", "instruction": "Step outside or to a window for ~20 seconds. Breathe once slowly. Tap Done.", "timer_sec": 45, "completion_check": "TAP_DONE" },
+      "fallbacks": [
+        { "when": "SKIP", "next_kind": "REWARD", "instruction_override": "Look at a distant point for 10 seconds. Tap Done." }
+      ],
+      "escalate_to": ["A_OPEN_ONLY", "X_NAME_TASK"],
+      "tags": ["restore", "reward"]
+    },
+    {
+      "id": "W_WATER",
+      "name": "Water",
+      "kind": "REWARD",
+      "state_affinity": ["Exhausted", "Frozen", "Any"],
+      "intensity_affinity": ["LOW", "MED", "HIGH", "Any"],
+      "difficulty": 0,
+      "duration_sec": 30,
+      "oracle_text": {
+        "title": "Water",
+        "reflection": "Your body is part of the system.",
+        "guidance": "One sip is a reset."
+      },
+      "action": { "label": "Drink", "instruction": "Drink water (one sip is enough). Tap Done.", "timer_sec": 30, "completion_check": "TAP_DONE" },
+      "fallbacks": [],
+      "escalate_to": ["A_OPEN_ONLY", "E_OPEN_LAPTOP"],
+      "tags": ["restore", "somatic-adjacent"]
+    },
+
+    // ---------- IF-THEN ----------
+    {
+      "id": "P_IFTHEN_START",
+      "name": "If-Then Seal",
+      "kind": "IFTHEN",
+      "state_affinity": ["Any"],
+      "intensity_affinity": ["LOW", "MED", "Any"],
+      "difficulty": 1,
+      "duration_sec": 30,
+      "oracle_text": {
+        "title": "Seal the Path",
+        "reflection": "Make the next start automatic.",
+        "guidance": "If stuck, then one tiny move."
+      },
+      "action": {
+        "label": "Write if-then",
+        "instruction": "Write: “If I feel stuck, then I will open the file and type one word.” Tap Done.",
+        "timer_sec": 30,
+        "completion_check": "TAP_DONE"
+      },
+      "fallbacks": [
+        { "when": "SKIP", "next_kind": "EXTERNALIZE", "instruction_override": "Write: “If stuck, then breathe once.” Tap Done." }
+      ],
+      "escalate_to": [],
+      "tags": ["implementation-intention"]
+    }
+  ]
+}

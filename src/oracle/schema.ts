@@ -58,11 +58,16 @@ export const deckSchema = z
   })
   .passthrough();
 
+// NOTE: The engine currently consumes the "v0" spreads format used by public/spreads.json:
+// spreads[].state, spreads[].slots[].slot_name/required_kind/pool_filter/selection.
+// Keep schema aligned with the runtime engine.
+
 const spreadSlotSchema = z
   .object({
-    id: z.string(),
-    name: z.string(),
-    slot: z.record(z.string(), z.unknown()),
+    slot_name: z.string(),
+    required_kind: z.string(),
+    pool_filter: z.record(z.string(), z.unknown()).optional(),
+    selection: z.record(z.string(), z.unknown()).optional(),
   })
   .passthrough();
 
@@ -70,8 +75,8 @@ const spreadSchema = z
   .object({
     id: z.string(),
     name: z.string(),
-    for_state: stateTypeSchema,
-    intensity_gate: intensityBandSchema,
+    state: stateTypeSchema,
+    description: z.string().optional(),
     slots: z.array(spreadSlotSchema),
   })
   .passthrough();
@@ -81,6 +86,9 @@ export const spreadsSchema = z
     version: z.string(),
     spread_schema: z.record(z.string(), z.unknown()),
     spreads: z.array(spreadSchema),
+    // Additional optional keys present in the spec file.
+    states: z.array(stateTypeSchema).optional(),
+    one_card_pulls: z.array(z.record(z.string(), z.unknown())).optional(),
   })
   .passthrough();
 

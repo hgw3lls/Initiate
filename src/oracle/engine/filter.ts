@@ -39,7 +39,4 @@ function filterCards(cards, requiredKind, poolFilter) {
   return cards.filter((card) => card.kind === requiredKind && cardMatchesFilter(card, poolFilter));
 }
 
-module.exports = {
-  cardMatchesFilter,
-  filterCards,
-};
+export { cardMatchesFilter, filterCards };

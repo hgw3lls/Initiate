@@ -1,5 +1,5 @@
-const { computeTTFA, computeStepCompletionRate } = require('./metrics.ts');
-const { readSessions, upsertSession } = require('./storage.ts');
+import { computeTTFA, computeStepCompletionRate } from './metrics.ts';
+import { readSessions, upsertSession } from './storage.ts';
 
 function nowIso() {
   return new Date().toISOString();
@@ -25,7 +25,7 @@ function withCommon(event, baseContext) {
   };
 }
 
-function startSession(context) {
+export function startSession(context) {
   const sessionId = makeSessionId();
 
   upsertSession(sessionId, () => {
@@ -51,7 +51,7 @@ function startSession(context) {
   return sessionId;
 }
 
-function logEvent(sessionId, event) {
+export function logEvent(sessionId, event) {
   return upsertSession(sessionId, (session) => {
     const baseContext = session.context || {};
     const normalized = withCommon(
@@ -69,7 +69,7 @@ function logEvent(sessionId, event) {
   });
 }
 
-function endSession(sessionId, summary) {
+export function endSession(sessionId, summary) {
   const sessions = readSessions();
   const session = sessions[sessionId];
   if (!session) {
@@ -106,8 +106,4 @@ function endSession(sessionId, summary) {
   return logEvent(sessionId, sessionEndEvent);
 }
 
-module.exports = {
-  startSession,
-  logEvent,
-  endSession,
-};
+

@@ -2,6 +2,5 @@
 
 const TELEMETRY_STORAGE_KEY = 'oracle_sessions_v1';
 
-module.exports = {
-  TELEMETRY_STORAGE_KEY,
-};
+// Use ESM exports so Vite/Vitest/Rollup interop is consistent.
+export { TELEMETRY_STORAGE_KEY };

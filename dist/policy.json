@@ -1,0 +1,67 @@
+// policy.json
+{
+  "version": "0.1.0",
+  "principles": [
+    "HIGH paralysis never starts with EXECUTE unless preceded by SOMATIC or ENV.",
+    "TOO_HARD must reduce effort and ambiguity before trying again.",
+    "No punishment loops. Exiting after regulation is counted as a win."
+  ],
+  "intensity_bands": {
+    "LOW": { "stuck_min": 0, "stuck_max": 33 },
+    "MED": { "stuck_min": 34, "stuck_max": 66 },
+    "HIGH": { "stuck_min": 67, "stuck_max": 100 }
+  },
+  "spread_selection": {
+    "by_state": {
+      "Frozen": "SP_BREAK_STONE",
+      "Overwhelmed": "SP_CLEAR_FOG",
+      "Avoiding": "SP_CROSS_THRESHOLD",
+      "Exhausted": "SP_RESTORE_FLAME",
+      "Blank": "SP_SIGNAL_STATIC",
+      "AnxiousLoop": "SP_CLEAR_FOG"
+    }
+  },
+  "adapter": {
+    "on_done": {
+      "reward": { "mode": "FOG_CLEAR", "haptic": "SOFT_PULSE", "copy_pool": ["Motion detected.", "First step secured.", "You moved. That's the spell breaking."] },
+      "escalate_rule": {
+        "after_consecutive_dones": 2,
+        "max_difficulty_increase": 1,
+        "preferred_next_kinds": ["EXECUTE", "EXECUTE", "IFTHEN"]
+      }
+    },
+    "on_too_hard": {
+      "rule_order": [
+        "reduce_duration",
+        "reduce_difficulty",
+        "switch_kind_downshift",
+        "offer_two_choices"
+      ],
+      "reduce_duration_factor": 0.5,
+      "difficulty_decrease": 1,
+      "switch_kind_downshift_priority": ["SOMATIC", "ENV", "EXTERNALIZE", "EXECUTE"],
+      "two_choice_template": {
+        "option_a_kind": "SOMATIC",
+        "option_b_kind": "ENV",
+        "copy": "Choose one tiny door: A) soften the body OR B) open the tool."
+      },
+      "max_too_hard_retries_per_slot": 2
+    },
+    "on_skip": {
+      "switch_kind_priority": ["ENV", "SOMATIC", "EXTERNALIZE", "EXECUTE"],
+      "max_skips_per_reading": 3
+    },
+    "on_abandon": {
+      "next_session_defaults": {
+        "force_first_kind": "SOMATIC",
+        "max_first_step_difficulty": 1
+      }
+    }
+  },
+  "guards": {
+    "max_total_steps_per_reading": 6,
+    "max_total_minutes_per_reading": 10,
+    "no_streak_punishment": true,
+    "allow_stop_here_always": true
+  }
+}

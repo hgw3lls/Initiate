@@ -1,6 +1,6 @@
-const { GENTLER_KIND_ORDER } = require('./engineTypes.ts');
-const { filterCards } = require('./filter.ts');
-const { weightedSelect } = require('./weights.ts');
+import { GENTLER_KIND_ORDER } from './engineTypes.ts';
+import { filterCards } from './filter.ts';
+import { weightedSelect } from './weights.ts';
 
 function selectSpreadId(state_type, policy) {
   return policy && policy.spread_selection && policy.spread_selection.by_state
@@ -68,7 +68,4 @@ function buildReading(spreadId, deck, spreadsConfig, policy, context, history) {
   };
 }
 
-module.exports = {
-  selectSpreadId,
-  buildReading,
-};
+export { selectSpreadId, buildReading };

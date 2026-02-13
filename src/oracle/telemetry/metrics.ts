@@ -1,4 +1,6 @@
-function computeTTFA(events) {
+// Vite/Rollup expects ES modules. Keep this file ESM so default imports work.
+
+export function computeTTFA(events) {
   const start = events.find((event) => event.name === 'SESSION_START');
   const firstDone = events.find(
     (event) => event.name === 'STEP_OUTCOME' && event.fields && event.fields.outcome === 'DONE',
@@ -11,7 +13,7 @@ function computeTTFA(events) {
   return Math.max(0, Math.round((doneAt - startAt) / 1000));
 }
 
-function computeStepCompletionRate(events) {
+export function computeStepCompletionRate(events) {
   const outcomes = events.filter((event) => event.name === 'STEP_OUTCOME');
   const stepsAttempted = outcomes.length;
   if (stepsAttempted === 0) return 0;
