@@ -1,7 +1,7 @@
-const { describe, it, expect } = require('vitest');
-const { TELEMETRY_STORAGE_KEY } = require('./types.ts');
-const { getStorage, readSessions } = require('./storage.ts');
-const { startSession, logEvent, endSession } = require('./logger.ts');
+import { describe, it, expect } from 'vitest';
+import { TELEMETRY_STORAGE_KEY } from './types.ts';
+import { getStorage, readSessions } from './storage.ts';
+import { startSession, logEvent, endSession } from './logger.ts';
 
 describe('local telemetry logger', () => {
   it('stores coherent event sequence with computed ttfa_seconds and no network calls', () => {
@@ -15,7 +15,6 @@ describe('local telemetry logger', () => {
       throw new Error('network should not be called');
     };
 
-
     const baseTime = Date.parse('2026-01-01T00:00:00.000Z');
 
     const sessionId = startSession({
@@ -27,7 +26,6 @@ describe('local telemetry logger', () => {
       stuck_level: 80,
       timestamp_iso: new Date(baseTime).toISOString(),
     });
-
 
     logEvent(sessionId, {
       name: 'STEP_OUTCOME',

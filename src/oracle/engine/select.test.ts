@@ -1,5 +1,5 @@
-const { describe, it, expect } = require('vitest');
-const { buildReading, selectSpreadId } = require('./select.ts');
+import { describe, it, expect } from 'vitest';
+import { buildReading, selectSpreadId } from './select.ts';
 
 const basePolicy = {
   spread_selection: {
